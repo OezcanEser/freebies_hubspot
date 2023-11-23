@@ -1,0 +1,32 @@
+/**
+* how to calculate clamp() example
+* Change = (sizeMax - sizeMin) / (viewportMax - viewportMin)
+* Change = (18px - 16px) / (1000px - 500px)
+* Change = 0.004
+
+* value_a = sizeMax - viewportMax * Change
+* value_a = 18px - 1000px * 0.004
+* value_a = 14px = 0.875rem
+
+* value_b = 100vw * Change
+* value_b = 100vw * 0.004
+* value_b = 0.4vw
+
+* Result = clamp(sizeMin, value_a + B, sizeMax)
+* Result = clamp(1rem, 0.875rem + 0.4vw, 1.125rem)
+*/
+
+{%- macro clamp(font_size_min, font_size_max, viewport_min, viewport_max) -%}
+
+{%- set value_size_min = font_size_min -%}
+{%- set value_size_max = font_size_max -%}
+
+{%- set value_min = viewport_min -%}
+{%- set value_max = viewport_max -%}
+
+{%- set change = (value_size_max - value_size_min) / (value_max - value_min) -%}
+
+{%- set value_a = value_size_max - value_max * change -%}
+{%- set value_b = "100" * change -%}
+  clamp({{ font_size_min / 16 + "rem" }}, {{ value_a / 16 + "rem" }} + {{ value_b + "vw" }}, {{ font_size_max / 16 + "rem" }})
+{%- endmacro -%}
